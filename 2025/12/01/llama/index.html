@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="...">
+    <meta property="og:type" content="website">
+    <meta name="description" content="...">
+    <meta name="keyword"  content="RL, VLA, World Model">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Llama入门 - Lay&#39;s blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code, sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.png" />
+        </div>
+        <div class="name">
+            <i>Lay</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%85%8D%E7%BD%AE"><span class="toc-text">导入与模型配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RMSNorm"><span class="toc-text">RMSNorm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%8B%E8%BD%AC%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%EF%BC%88RoPE%EF%BC%89"><span class="toc-text">旋转位置编码（RoPE）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SwiGLU-%E5%89%8D%E9%A6%88%E7%BD%91%E7%BB%9C"><span class="toc-text">SwiGLU 前馈网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E6%9F%A5%E8%AF%A2%E6%B3%A8%E6%84%8F%E5%8A%9B%EF%BC%88GQA%EF%BC%89"><span class="toc-text">组查询注意力（GQA）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LLaMA-Block-%E7%BB%93%E6%9E%84"><span class="toc-text">LLaMA Block 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LLaMA-%E6%A8%A1%E5%9E%8B%E6%95%B4%E4%BD%93"><span class="toc-text">LLaMA 模型整体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E6%AD%A3%E4%BD%99%E5%BC%A6%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81"><span class="toc-text">传统正余弦位置编码</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> sometimes code, sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Llama入门
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2025-12-01 22:10:50</span></span>
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h3 id="导入与模型配置"><a href="#导入与模型配置" class="headerlink" title="导入与模型配置"></a>导入与模型配置</h3><p>LLaMA 的基本超参数可表示为向量 $\theta &#x3D; {V, d, L, H, H_{\text{kv}}, d_{\text{ff}}}$，分别对应词表大小、隐层维度、层数、注意力头数、键值头数、前馈层宽度。下面的代码加载必要库并定义这些超参数的数据类。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">from</span> dataclasses <span class="keyword">import</span> dataclass</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="meta">@dataclass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LLaMAConfig</span>:</span><br><span class="line">    vocab_size: <span class="built_in">int</span> = <span class="number">32000</span></span><br><span class="line">    dim: <span class="built_in">int</span> = <span class="number">4096</span></span><br><span class="line">    n_layers: <span class="built_in">int</span> = <span class="number">24</span></span><br><span class="line">    n_heads: <span class="built_in">int</span> = <span class="number">32</span></span><br><span class="line">    n_kv_heads: <span class="built_in">int</span> = <span class="number">8</span></span><br><span class="line">    rope_theta: <span class="built_in">float</span> = <span class="number">10000.0</span></span><br><span class="line">    max_seq_len: <span class="built_in">int</span> = <span class="number">4096</span></span><br><span class="line">    intermediate_size: <span class="built_in">int</span> = <span class="number">11008</span></span><br><span class="line">    dropout: <span class="built_in">float</span> = <span class="number">0.0</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="RMSNorm"><a href="#RMSNorm" class="headerlink" title="RMSNorm"></a>RMSNorm</h3><p>RMSNorm 在每个 token 向量维度上进行均方根归一化：<br>$$\mathrm{RMSNorm}(x)&#x3D;\gamma \cdot \frac{x}{\sqrt{\frac{1}{d}\sum_{i&#x3D;1}^{d} x_i^2 + \epsilon}}$$<br>可在深层 Transformer 中保持数值稳定性，避免 LayerNorm 的均值项带来的额外计算。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">RMSNorm</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dim, eps=<span class="number">1e-6</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.weight = nn.Parameter(torch.ones(dim))</span><br><span class="line">        <span class="variable language_">self</span>.eps = eps</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        norm = x.<span class="built_in">pow</span>(<span class="number">2</span>).mean(-<span class="number">1</span>, keepdim=<span class="literal">True</span>)</span><br><span class="line">        x = x * torch.rsqrt(norm + <span class="variable language_">self</span>.eps)</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.weight * x</span><br></pre></td></tr></table></figure>
+
+<h3 id="旋转位置编码（RoPE）"><a href="#旋转位置编码（RoPE）" class="headerlink" title="旋转位置编码（RoPE）"></a>旋转位置编码（RoPE）</h3><p>RoPE 将二维正余弦旋转直接施加在注意力空间：<br>$$\operatorname{RoPE}(x_{2i}, x_{2i+1}) &#x3D;<br>\begin{bmatrix}<br> x_{2i} &amp; -x_{2i+1} \<br> x_{2i+1} &amp; x_{2i}<br>\end{bmatrix}<br>\begin{bmatrix}<br>\cos(\theta_i) \<br>\sin(\theta_i)<br>\end{bmatrix}$$<br>使得注意力得分隐式编码相对位置信息，满足 $\langle \operatorname{RoPE}(q_k), \operatorname{RoPE}(k_j)\rangle &#x3D; \langle q_k, R_{k-j} k_j \rangle$。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">RotaryEmbedding</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dim, theta=<span class="number">10000.0</span>, max_seq_len=<span class="number">4096</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        inv_freq = torch.exp(-math.log(theta) * (torch.arange(<span class="number">0</span>, dim, <span class="number">2</span>).<span class="built_in">float</span>() / dim))</span><br><span class="line">        t = torch.arange(max_seq_len, dtype=torch.float32)</span><br><span class="line">        freqs = inv_freq.unsqueeze(<span class="number">0</span>) * t.unsqueeze(<span class="number">1</span>)</span><br><span class="line">        <span class="variable language_">self</span>.register_buffer(<span class="string">&quot;cos&quot;</span>, freqs.cos()[<span class="literal">None</span>, <span class="literal">None</span>, :, :], persistent=<span class="literal">False</span>)</span><br><span class="line">        <span class="variable language_">self</span>.register_buffer(<span class="string">&quot;sin&quot;</span>, freqs.sin()[<span class="literal">None</span>, <span class="literal">None</span>, :, :], persistent=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, q, k, seq_len</span>):</span><br><span class="line">        cos = <span class="variable language_">self</span>.cos[..., :seq_len, :]</span><br><span class="line">        sin = <span class="variable language_">self</span>.sin[..., :seq_len, :]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">apply_rotary</span>(<span class="params">x</span>):</span><br><span class="line">            half = x.shape[-<span class="number">1</span>] // <span class="number">2</span></span><br><span class="line">            x1, x2 = x[..., :half], x[..., half:]</span><br><span class="line">            <span class="keyword">return</span> torch.cat((x1*cos - x2*sin, x1*sin + x2*cos), dim=-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> apply_rotary(q), apply_rotary(k)</span><br></pre></td></tr></table></figure>
+
+<h3 id="SwiGLU-前馈网络"><a href="#SwiGLU-前馈网络" class="headerlink" title="SwiGLU 前馈网络"></a>SwiGLU 前馈网络</h3><p>SwiGLU 组合了 SiLU 门控：<br>$$\text{SwiGLU}(x)&#x3D;W_3\Big(\text{SiLU}(W_1 x) \odot W_2 x\Big)$$<br>其中 $\text{SiLU}(z)&#x3D;z\cdot\sigma(z)$，可提升前馈层表达力并保持梯度稳定。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SwiGLU</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dim, hidden_dim</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.w1 = nn.Linear(dim, hidden_dim, bias=<span class="literal">False</span>)</span><br><span class="line">        <span class="variable language_">self</span>.w2 = nn.Linear(dim, hidden_dim, bias=<span class="literal">False</span>)</span><br><span class="line">        <span class="variable language_">self</span>.w3 = nn.Linear(hidden_dim, dim, bias=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.w3(F.silu(<span class="variable language_">self</span>.w1(x)) * <span class="variable language_">self</span>.w2(x))</span><br></pre></td></tr></table></figure>
+
+<h3 id="组查询注意力（GQA）"><a href="#组查询注意力（GQA）" class="headerlink" title="组查询注意力（GQA）"></a>组查询注意力（GQA）</h3><p>GQA 通过共享键值头降低内存：<br>$$\text{Attention}(Q,K,V)&#x3D;\text{softmax}\left(\frac{QK^\top}{\sqrt{d_h}} + M\right)V$$<br>其中 $K,V$ 以 $H_{\text{kv}}$ 头计算，然后复制到 $H$ 个查询头，$M$ 为因果掩码。RoPE 在 $Q,K$ 上注入位置依赖。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">GQAttention</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dim, n_heads, n_kv_heads, rope</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.n_heads = n_heads</span><br><span class="line">        <span class="variable language_">self</span>.n_kv = n_kv_heads</span><br><span class="line">        <span class="variable language_">self</span>.head_dim = dim // n_heads</span><br><span class="line">        <span class="variable language_">self</span>.rope = rope</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.q_proj = nn.Linear(dim, dim, bias=<span class="literal">False</span>)</span><br><span class="line">        <span class="variable language_">self</span>.k_proj = nn.Linear(dim, <span class="variable language_">self</span>.head_dim * n_kv_heads, bias=<span class="literal">False</span>)</span><br><span class="line">        <span class="variable language_">self</span>.v_proj = nn.Linear(dim, <span class="variable language_">self</span>.head_dim * n_kv_heads, bias=<span class="literal">False</span>)</span><br><span class="line">        <span class="variable language_">self</span>.o_proj = nn.Linear(dim, dim, bias=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, mask=<span class="literal">None</span>, cache=<span class="literal">None</span></span>):</span><br><span class="line">        B, T, C = x.shape</span><br><span class="line">        q = <span class="variable language_">self</span>.q_proj(x).view(B, T, <span class="variable language_">self</span>.n_heads, <span class="variable language_">self</span>.head_dim).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        k = <span class="variable language_">self</span>.k_proj(x).view(B, T, <span class="variable language_">self</span>.n_kv, <span class="variable language_">self</span>.head_dim).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        v = <span class="variable language_">self</span>.v_proj(x).view(B, T, <span class="variable language_">self</span>.n_kv, <span class="variable language_">self</span>.head_dim).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        q, k = <span class="variable language_">self</span>.rope(q, k, T)</span><br><span class="line">        <span class="keyword">if</span> cache <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            k = torch.cat([cache[<span class="string">&quot;k&quot;</span>], k], dim=<span class="number">2</span>)</span><br><span class="line">            v = torch.cat([cache[<span class="string">&quot;v&quot;</span>], v], dim=<span class="number">2</span>)</span><br><span class="line">            T = k.shape[<span class="number">2</span>]</span><br><span class="line">        k = k.repeat_interleave(<span class="variable language_">self</span>.n_heads // <span class="variable language_">self</span>.n_kv, dim=<span class="number">1</span>)</span><br><span class="line">        v = v.repeat_interleave(<span class="variable language_">self</span>.n_heads // <span class="variable language_">self</span>.n_kv, dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        attn = torch.matmul(q, k.transpose(-<span class="number">2</span>, -<span class="number">1</span>)) / math.sqrt(<span class="variable language_">self</span>.head_dim)</span><br><span class="line">        <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            attn = attn + mask</span><br><span class="line">        attn = attn.softmax(dim=-<span class="number">1</span>)</span><br><span class="line">        out = torch.matmul(attn, v).transpose(<span class="number">1</span>, <span class="number">2</span>).contiguous().view(B, T, C)</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.o_proj(out), &#123;<span class="string">&quot;k&quot;</span>: k, <span class="string">&quot;v&quot;</span>: v&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="LLaMA-Block-结构"><a href="#LLaMA-Block-结构" class="headerlink" title="LLaMA Block 结构"></a>LLaMA Block 结构</h3><p>每个 Block 采用 pre-norm 残差结构：<br>$$x’ &#x3D; x + \text{Attention}(\text{RMSNorm}(x))$$<br>$$x’’ &#x3D; x’ + \text{FFN}(\text{RMSNorm}(x’))$$<br>确保梯度在深层网络中稳定传播。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LLaMABlock</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, cfg, rope</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.attn_norm = RMSNorm(cfg.dim)</span><br><span class="line">        <span class="variable language_">self</span>.ff_norm = RMSNorm(cfg.dim)</span><br><span class="line">        <span class="variable language_">self</span>.attn = GQAttention(cfg.dim, cfg.n_heads, cfg.n_kv_heads, rope)</span><br><span class="line">        <span class="variable language_">self</span>.ff = SwiGLU(cfg.dim, cfg.intermediate_size)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, mask=<span class="literal">None</span>, cache=<span class="literal">None</span></span>):</span><br><span class="line">        attn_out, cache = <span class="variable language_">self</span>.attn(<span class="variable language_">self</span>.attn_norm(x), mask, cache)</span><br><span class="line">        x = x + attn_out</span><br><span class="line">        x = x + <span class="variable language_">self</span>.ff(<span class="variable language_">self</span>.ff_norm(x))</span><br><span class="line">        <span class="keyword">return</span> x, cache</span><br></pre></td></tr></table></figure>
+
+<h3 id="LLaMA-模型整体"><a href="#LLaMA-模型整体" class="headerlink" title="LLaMA 模型整体"></a>LLaMA 模型整体</h3><p>模型包含词嵌入、$L$ 个 Block 以及输出头：<br>$$h_0 &#x3D; E(x),\quad h_{l+1} &#x3D; \text{Block}<em>l(h_l)$$<br>$$\text{Logits} &#x3D; h_L W</em>{\text{lm}}^\top$$<br>可配合缓存 ${K,V}$ 实现增量推理。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LLaMAModel</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, cfg: LLaMAConfig</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.cfg = cfg</span><br><span class="line">        <span class="variable language_">self</span>.embed = nn.Embedding(cfg.vocab_size, cfg.dim)</span><br><span class="line">        rope = RotaryEmbedding(cfg.dim // cfg.n_heads, cfg.rope_theta, cfg.max_seq_len)</span><br><span class="line">        <span class="variable language_">self</span>.layers = nn.ModuleList([LLaMABlock(cfg, rope) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(cfg.n_layers)])</span><br><span class="line">        <span class="variable language_">self</span>.norm = RMSNorm(cfg.dim)</span><br><span class="line">        <span class="variable language_">self</span>.lm_head = nn.Linear(cfg.dim, cfg.vocab_size, bias=<span class="literal">False</span>)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, input_ids, mask=<span class="literal">None</span>, cache=<span class="literal">None</span></span>):</span><br><span class="line">        x = <span class="variable language_">self</span>.embed(input_ids)</span><br><span class="line">        new_caches = []</span><br><span class="line">        <span class="keyword">for</span> i, layer <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="variable language_">self</span>.layers):</span><br><span class="line">            layer_cache = <span class="literal">None</span> <span class="keyword">if</span> cache <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> cache[i]</span><br><span class="line">            x, layer_cache = layer(x, mask, layer_cache)</span><br><span class="line">            new_caches.append(layer_cache)</span><br><span class="line">        x = <span class="variable language_">self</span>.norm(x)</span><br><span class="line">        logits = <span class="variable language_">self</span>.lm_head(x)</span><br><span class="line">        <span class="keyword">return</span> logits, new_caches</span><br></pre></td></tr></table></figure>
+
+<h3 id="传统正余弦位置编码"><a href="#传统正余弦位置编码" class="headerlink" title="传统正余弦位置编码"></a>传统正余弦位置编码</h3><p>Transformer 原始位置编码通过固定正余弦模式：<br>$$\text{PE}<em>{(p,2i)} &#x3D; \sin\left(\frac{p}{10000^{2i&#x2F;d}}\right),\qquad \text{PE}</em>{(p,2i+1)} &#x3D; \cos\left(\frac{p}{10000^{2i&#x2F;d}}\right)$$<br>并与词向量相加：$x_p’ &#x3D; x_p + \text{PE}_p$，用于绝对位置信息注入。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SinusoidalPositionalEncoding</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dim, max_seq_len=<span class="number">4096</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        pe = torch.zeros(max_seq_len, dim)</span><br><span class="line">        position = torch.arange(<span class="number">0</span>, max_seq_len, dtype=torch.float32).unsqueeze(<span class="number">1</span>)</span><br><span class="line">        div_term = torch.exp(torch.arange(<span class="number">0</span>, dim, <span class="number">2</span>).<span class="built_in">float</span>() * (-math.log(<span class="number">10000.0</span>) / dim))</span><br><span class="line">        pe[:, <span class="number">0</span>::<span class="number">2</span>] = torch.sin(position * div_term)</span><br><span class="line">        pe[:, <span class="number">1</span>::<span class="number">2</span>] = torch.cos(position * div_term)</span><br><span class="line">        <span class="variable language_">self</span>.register_buffer(<span class="string">&quot;pe&quot;</span>, pe.unsqueeze(<span class="number">0</span>), persistent=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, start_pos=<span class="number">0</span></span>):</span><br><span class="line">        seq_len = x.size(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> x + <span class="variable language_">self</span>.pe[:, start_pos:start_pos + seq_len]</span><br></pre></td></tr></table></figure>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/laylow13">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+</html>
